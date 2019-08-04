@@ -1,2 +1,3 @@
 # ts-axios
-type script axios just in browser
+## 提交
+npm run commit
