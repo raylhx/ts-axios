@@ -3,7 +3,6 @@ import xhr from './xhr'
 function axios(config: AxiosRequestConfig) {
   console.log('config', config)
   xhr(config)
-  // TODO
 }
 
 export default axios
