@@ -1,7 +1,7 @@
 /**
  * 处理请求url参数工具
  */
-import { isDate, isObject } from './isType'
+import { isDate, isPlainObject } from './isType'
 export function encode(str: string): string {
   return encodeURIComponent(str)
     .replace(/%40/g, '@')
@@ -47,7 +47,7 @@ export function buildURL(url: string, params?: any): string {
     arrTemp.forEach(item => {
       if (isDate(item)) {
         val = item.toISOString()
-      } else if (isObject(item)) {
+      } else if (isPlainObject(item)) {
         val = JSON.stringify(item)
       }
       parts.push(`${encode(key)}=${encode(val)}`)

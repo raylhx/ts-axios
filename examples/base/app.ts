@@ -60,3 +60,21 @@ axios({
     bar: 'baz'
   }
 })
+
+
+axios({
+  method: 'post',
+  url: '/base/post',
+  data: {
+    aaaaaa: 1,
+    bbbbbb: 2
+  }
+})
+
+const arrrrrr = new Int32Array([21, 31])
+
+axios({
+  method: 'post',
+  url: '/base/buffer',
+  data: arrrrrr
+})
