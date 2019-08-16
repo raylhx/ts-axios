@@ -1,0 +1,29 @@
+import { isPlainObject } from './isType'
+
+function normalizeHeaderName(headers: any, normalizedName: string): void {
+  if (!headers) return
+  // 检查属性名是否标准化
+  Object.keys(headers).forEach(name => {
+    if (name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase()) {
+      headers[normalizedName] = headers[name]
+      delete headers[name]
+    }
+  })
+}
+/**
+ *
+ * @param headers 处理header头部信息
+ * @param data
+ */
+export function processHeaders(headers: any, data: any): any {
+  // 标准化
+  normalizeHeaderName(headers, 'Content-Type')
+  // 如果是普通对象且没有添加Content-Type信息
+  if (isPlainObject(data)) {
+    if (headers && !headers['Content-Type']) {
+      headers['Content-Type'] = 'application/json;charset=utf-8'
+    }
+  }
+
+  return headers
+}

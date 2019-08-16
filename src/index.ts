@@ -1,11 +1,12 @@
-import { AxiosRequestConfig } from './types'
+import { AxiosRequestConfig, AxiosPromise } from './types'
 import { buildURL } from './utils/url'
 import xhr from './xhr'
 import { transformRequest } from './utils/data'
-function axios(config: AxiosRequestConfig) {
+import { processHeaders } from './utils/header'
+function axios(config: AxiosRequestConfig): AxiosPromise {
   processConfig(config)
   console.log('config', config)
-  xhr(config)
+  return xhr(config)
 }
 /**
  * 请求前处理
@@ -13,6 +14,7 @@ function axios(config: AxiosRequestConfig) {
  */
 function processConfig(config: AxiosRequestConfig): void {
   config.url = transfromURL(config)
+  config.headers = transfromHeaders(config)
   config.data = transfromRequestData(config)
 }
 
@@ -24,10 +26,22 @@ function transfromURL(config: AxiosRequestConfig): string {
   const { url, params } = config
   return buildURL(url, params)
 }
-
+/**
+ * 处理post请求的data数据
+ * @param config 需要处理的参数：data
+ */
 function transfromRequestData(config: AxiosRequestConfig): any {
   const { data } = config
   return transformRequest(data)
+}
+
+/**
+ * 处理请求体中的header
+ * @param config 需要出的参数： header
+ */
+function transfromHeaders(config: AxiosRequestConfig): any {
+  const { headers = {}, data } = config
+  return processHeaders(headers, data)
 }
 
 /**
