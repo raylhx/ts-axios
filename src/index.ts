@@ -1,12 +1,14 @@
 import { AxiosRequestConfig, AxiosPromise } from './types'
 import { buildURL } from './utils/url'
 import xhr from './xhr'
-import { transformRequest } from './utils/data'
+import { transformRequest, transformResponse } from './utils/data'
 import { processHeaders } from './utils/header'
 function axios(config: AxiosRequestConfig): AxiosPromise {
   processConfig(config)
   console.log('config', config)
-  return xhr(config)
+  return xhr(config).then((res) => {
+    return transformResponseData(res)
+  })
 }
 /**
  * 请求前处理
@@ -43,7 +45,14 @@ function transfromHeaders(config: AxiosRequestConfig): any {
   const { headers = {}, data } = config
   return processHeaders(headers, data)
 }
-
+/**
+ *
+ * @param res 返回结果
+ */
+function transformResponseData(res: AxiosResponse): AxiosResponse {
+  res.data = transformResponse(res.data)
+  return res
+}
 /**
  *  最终导出的axios对象
  */
