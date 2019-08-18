@@ -1,11 +1,11 @@
 import { AxiosResponse, AxiosRequestConfig } from "../types";
 
 export class AxiosError extends Error {
-  config: AxiosRequestConfig,
-  code?: string | null,
-  request?: any,
-  response?: AxiosResponse,
-  isAxiosError: boolean,
+  config: AxiosRequestConfig
+  code?: string | null
+  request?: any
+  response?: AxiosResponse
+  isAxiosError: boolean
 
   constructor (
     message: string,
@@ -21,6 +21,7 @@ export class AxiosError extends Error {
     this.request = request
     this.response = response
 
+    this.isAxiosError = true
     // 这段代码的目的是为了解决 TypeScript 继承一些内置对象的时候的坑
     Object.setPrototypeOf(this, AxiosError.prototype) // todo
 
