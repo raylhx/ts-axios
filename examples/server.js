@@ -9,19 +9,19 @@ const app = express()
 const compiler = webpack(WebpackConfig)
 const router = express.Router()
 
-router.get('/simple/get', function(req, res) {
+router.get('/simple/get', function (req, res) {
   res.json({
     msg: `hello world`
   })
 })
-router.get('/base/get', function(req, res) {
+router.get('/base/get', function (req, res) {
   res.json(req.query)
 })
-router.post('/base/post', function(req, res) {
+router.post('/base/post', function (req, res) {
   res.json(req.body)
 })
 
-router.post('/base/buffer', function(req, res) {
+router.post('/base/buffer', function (req, res) {
   let msg = []
   req.on('data', (chunk) => {
     if (chunk) {
@@ -34,7 +34,7 @@ router.post('/base/buffer', function(req, res) {
   })
 })
 
-router.get('/error/get', function(req, res) {
+router.get('/error/get', function (req, res) {
   if (Math.random() > 0.5) {
     res.json({
       msg: `hello world`
@@ -44,8 +44,39 @@ router.get('/error/get', function(req, res) {
     res.end()
   }
 })
+router.post('/extend/post', function (req, res) {
+  res.json({
+    msg: `hello world post`
+  })
+})
+router.get('/extend/get', function (req, res) {
+  res.json({
+    msg: `hello world get`
+  })
+})
+router.put('/extend/put', function (req, res) {
+  res.json({
+    msg: `hello world put`
+  })
+})
+// router.delete('/extend/delete', function (req, res) {
+//   res.json({
+//     msg: `hello world delete`
+//   })
+// })
 
-router.get('/error/timeout', function(req, res) {
+router.options('/extend/options', function (req, res) {
+  res.json({
+    msg: `hello world options`
+  })
+})
+
+router.head('/extend/head', function (req, res) {
+  res.json({
+    msg: `hello world`
+  })
+})
+router.get('/error/timeout', function (req, res) {
   setTimeout(() => {
     res.json({
       msg: `hello world`
@@ -67,7 +98,9 @@ app.use(webpackHotMiddleware(compiler))
 app.use(express.static(__dirname))
 
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
 
 const port = process.env.PORT || 8080
 module.exports = app.listen(port, () => {

@@ -10,7 +10,7 @@ export type Method =
   | 'Delete'
   | 'head'
   | 'Head'
-  | 'option'
+  | 'options'
   | 'OPTIONS'
   | 'post'
   | 'POST'
@@ -23,13 +23,13 @@ export type Method =
  * 请求
  */
 export interface AxiosRequestConfig {
-  url: string
+  url?: string
   method?: Method
   data?: any
   params?: any
   headers?: any
   responseType?: any
-  timeout?:number
+  timeout?: number
 }
 
 /**
@@ -57,7 +57,7 @@ export interface AxiosResponseConfig {
 }
 
 /**
- * 错误
+ * 错误 暴露给外部使用
  */
 export interface AxiosError extends Error {
   config: AxiosRequestConfig
@@ -65,4 +65,26 @@ export interface AxiosError extends Error {
   request?: any
   response?: AxiosResponse
   isAxiosError: boolean
+}
+
+/**
+ * 扩展 axios 混合对象
+ */
+export interface Axios {
+  request(config: AxiosRequestConfig): AxiosPromise
+
+  get(url: string, config?: AxiosRequestConfig): AxiosPromise
+  head(url: string, config?: AxiosRequestConfig): AxiosPromise
+  delete(url: string, config?: AxiosRequestConfig): AxiosPromise
+  options(url: string, config?: AxiosRequestConfig): AxiosPromise
+
+  post(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
+  put(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
+  patch(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
+}
+
+export interface AxiosInstance extends Axios {
+  (config: AxiosRequestConfig): AxiosPromise // todo ????
+
+  (url: string, config?: AxiosRequestConfig): AxiosPromise
 }
