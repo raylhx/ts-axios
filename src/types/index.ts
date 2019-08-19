@@ -1,5 +1,3 @@
-import { request } from 'https'
-
 /**
  * 用Method去约束method的参数，避免什么值都可以传入
  */
@@ -68,7 +66,7 @@ export interface AxiosError extends Error {
 }
 
 /**
- * 扩展 axios 混合对象
+ * 描述Axios的方法
  */
 export interface Axios {
   request(config: AxiosRequestConfig): AxiosPromise
@@ -83,8 +81,11 @@ export interface Axios {
   patch(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
 }
 
+/**
+ * 实现函数重载，可传递1个参数或者是2个参数
+ */
 export interface AxiosInstance extends Axios {
-  (config: AxiosRequestConfig): AxiosPromise // todo ????
+  (config: AxiosRequestConfig): AxiosPromise
 
   (url: string, config?: AxiosRequestConfig): AxiosPromise
 }

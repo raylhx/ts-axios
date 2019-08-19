@@ -1,8 +1,6 @@
-import { AxiosRequestConfig, AxiosPromise } from '../types'
-import { buildURL } from '../utils/url'
+import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
+import { buildURL, transformRequest, transformResponse, processHeaders } from '../utils'
 import xhr from './xhr'
-import { transformRequest, transformResponse } from '../utils/data'
-import { processHeaders } from '../utils/header'
 export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
   processConfig(config)
   console.log('config', config)
