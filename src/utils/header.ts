@@ -1,4 +1,6 @@
 import { isPlainObject } from './isType'
+import { Method } from '../types'
+import { deepMerge } from '.'
 
 function normalizeHeaderName(headers: any, normalizedName: string): void {
   if (!headers) return
@@ -47,4 +49,21 @@ export function parseHeaders(headers: string): any {
   })
 
   return parsed
+}
+
+/**
+ * 处理config请求头 todo 没搞懂他们为什么合并
+ */
+export function flattenHeaders(headers: any, method: Method) {
+  if (!headers) return headers
+  // 合并
+  headers = deepMerge(headers.common || {}, headers[method] || {}, headers)
+
+  const methodsToDelete = ['delete', 'get', 'head', 'options', 'post', 'put', 'patch', 'common']
+  // 合并完成之后删除相关属性
+  methodsToDelete.forEach(method => {
+    delete headers[method]
+  })
+
+  return headers
 }

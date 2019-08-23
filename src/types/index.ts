@@ -32,6 +32,17 @@ export interface AxiosRequestConfig {
   headers?: any
   responseType?: any
   timeout?: number
+
+  // 字符串索引签名
+  [propName: string]: any
+
+  // 修改默认配置
+  transformRequest?: AxiosTransformer | AxiosTransformer[]
+  transformResponse?: AxiosTransformer | AxiosTransformer[]
+}
+
+export interface AxiosTransformer {
+  (data: any, headers?: any): any
 }
 
 /**
