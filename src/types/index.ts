@@ -89,6 +89,11 @@ export interface Axios {
  * 实现函数重载，可传递1个参数或者是2个参数
  */
 export interface AxiosInstance extends Axios {
+  // 定时器
+  interceptors: {
+    request: AxiosInterceptorManager<AxiosRequestConfig>
+    response: AxiosInterceptorManager<AxiosResponse>
+  }
   <T = any>(config: AxiosRequestConfig): AxiosPromise<T>
 
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
