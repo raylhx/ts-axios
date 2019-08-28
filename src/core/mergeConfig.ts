@@ -1,5 +1,8 @@
 import { AxiosRequestConfig } from '../types'
 import { isPlainObject, deepMerge } from '../utils'
+
+const strats = Object.create(null)
+
 /**
  * 复杂对象合并
  * @param val1 默认配置
@@ -17,6 +20,33 @@ function deepMergeStrat(val1: any, val2: any): any {
   }
 }
 
+/**
+ * 默认合并策略
+ * @param val1 键值1
+ * @param val2 键值2
+ */
+function defaultStrat(val1: any, val2: any): any {
+  return typeof val2 !== 'undefined' ? val2 : val1
+}
+
+/**
+ * 只接受自定义配置合并，比如url、params、data，
+ * @param val1
+ * @param val2
+ */
+function fromVal2Strat(val1: any, val2: any): any {
+  if (typeof val2 !== 'undefined') return val2
+}
+const stratKeysFromVal2 = ['url', 'params', 'data']
+
+stratKeysFromVal2.forEach(item => {
+  strats[item] = fromVal2Strat
+})
+
+const stratKeysFromDeepMerge = ['headers']
+stratKeysFromDeepMerge.forEach(item => {
+  strats[item] = deepMergeStrat
+})
 /**
  *
  * @param config1 默认配置
@@ -43,33 +73,9 @@ export default function mergeConfig(
   }
 
   function mergeField(key: string): void {
-    // const strat = strats[key] || defaultStrat
-    const strat = defaultStrat // todo
+    const strat = strats[key] || defaultStrat
     config[key] = strat(config1[key], config2![key])
   }
 
   return config
 }
-
-/**
- * 默认合并策略
- * @param val1 键值1
- * @param val2 键值2
- */
-function defaultStrat(val1: any, val2: any): any {
-  return typeof val2 !== 'undefined' ? val2 : val1
-}
-
-/**
- * 只接受自定义配置合并，比如url、params、data，
- * @param val1
- * @param val2
- */
-function fromVal2Strat(val1: any, val2: any): any {
-  if (typeof val2 !== 'undefined') return val2
-}
-const stratKeysFromVal2 = ['url', 'params', 'data']
-
-stratKeysFromVal2.forEach(item => {
-  // strats[key] = fromVal2Strat[key] // todo???
-})

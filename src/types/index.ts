@@ -111,6 +111,13 @@ export interface AxiosInstance extends Axios {
 }
 
 /**
+ * 静态接口
+ */
+export interface AxiosStatic extends AxiosInstance {
+  create(config?: AxiosRequestConfig): AxiosInstance
+}
+
+/**
  * 拦截器 接口
  */
 export interface AxiosInterceptorManager<T> {

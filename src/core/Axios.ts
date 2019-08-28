@@ -8,6 +8,7 @@ import {
 } from '../types'
 import dispatchRequest from './dispatchRequest'
 import InterceptorManager from './interceptorManager'
+import { deepMerge } from '../utils'
 
 /**
  * 拦截器
@@ -51,6 +52,7 @@ export default class Axios {
       config = url
     }
 
+    config = deepMerge(this.defaults, config)
     const chain: PromiseChain[] = [
       {
         resolved: dispatchRequest, // ???
