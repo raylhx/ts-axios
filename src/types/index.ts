@@ -39,6 +39,9 @@ export interface AxiosRequestConfig {
   // 修改默认配置
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]
+
+  // 取消
+  cancelToken?: CancelToken
 }
 
 export interface AxiosTransformer {
@@ -131,4 +134,26 @@ export interface ResolveFn<T = any> {
 
 export interface RejectedFn {
   (error: any): any
+}
+
+/**
+ * 取消
+ */
+export interface CancelToken {
+  promise: Promise<string>
+  reason?: string
+}
+
+/**
+ * 取消方法
+ */
+export interface Canceler {
+  (message?: string): void
+}
+
+/**
+ *
+ */
+export interface CancelExecutor {
+  (cancel: Canceler): void
 }

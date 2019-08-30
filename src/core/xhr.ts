@@ -3,7 +3,7 @@ import { parseHeaders, createError } from '../utils'
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
-    const { data = null, url, method = 'get', headers, responseType, timeout } = config
+    const { data = null, url, method = 'get', headers, responseType, timeout, cancelToken } = config
     // 生成一个xhr对象 https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest
     const request = new XMLHttpRequest()
 
@@ -56,6 +56,15 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       }
     })
 
+    // 取消请求 ??
+    if (cancelToken) {
+      cancelToken.promise.then(reason => {
+        request.abort()
+        reject(reason)
+      })
+    }
+
+    //
     request.send(data)
     // 处理非200状态码函数
     function handleResponse(res: AxiosResponse) {
