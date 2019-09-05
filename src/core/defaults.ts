@@ -23,7 +23,15 @@ const defaults: AxiosRequestConfig = {
     function(data: any): any {
       return transformResponse(data)
     }
-  ]
+  ],
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  // 自定义合法状态码
+  validateStatus(status: number): boolean {
+    return status >= 200 && status <= 300
+  }
 }
 
 const methodsWithoutData = ['delete', 'get', 'head', 'options']

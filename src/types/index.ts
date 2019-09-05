@@ -42,6 +42,27 @@ export interface AxiosRequestConfig {
 
   // 取消
   cancelToken?: CancelToken
+  widthCredentials?: boolean
+
+  // CSRF
+  xsrfCookieName?: string
+  xsrfHeaderName?: string
+
+  // 上传、下载进度
+  onDownloadProgress?: (e: ProgressEvent) => void
+  onUploadProgress?: (e: ProgressEvent) => void
+
+  // HTTP授权
+  auth?: AxiosBasicCredentials
+
+  // 自定义合法状态码
+  validateStatus?: (status: number) => boolean
+
+  // 自定义参数序列化
+  paramsSerializer?: (params: any) => string
+
+  // base url
+  baseURL?: string
 }
 
 export interface AxiosTransformer {
@@ -113,11 +134,24 @@ export interface AxiosInstance extends Axios {
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 }
 
+export interface Cancel {
+  message?: string
+}
+
+export interface CancelStatic {
+  new (msg?: string): Cancel
+}
+
 /**
  * 静态接口
  */
 export interface AxiosStatic extends AxiosInstance {
   create(config?: AxiosRequestConfig): AxiosInstance
+
+  // 取消方法
+  CancelToken: CancelTokenStatic
+  Cancel: CancelStatic
+  isCancel: (value: any) => boolean
 }
 
 /**
@@ -140,8 +174,11 @@ export interface RejectedFn {
  * 取消
  */
 export interface CancelToken {
-  promise: Promise<string>
-  reason?: string
+  promise: Promise<Cancel>
+  reason?: Cancel
+
+  // 异常
+  throwIfRequested(): void
 }
 
 /**
@@ -156,4 +193,25 @@ export interface Canceler {
  */
 export interface CancelExecutor {
   (cancel: Canceler): void
+}
+
+/**
+ * ??
+ */
+export interface CancelTokenSource {
+  token: CancelToken
+  cancel: Canceler
+}
+
+export interface CancelTokenStatic {
+  new (executor: CancelExecutor): CancelToken
+  source(): CancelTokenSource
+}
+
+/**
+ * HTTP授权接口
+ */
+export interface AxiosBasicCredentials {
+  username: string
+  password: string
 }

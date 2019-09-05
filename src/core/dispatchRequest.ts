@@ -6,10 +6,13 @@ import {
   transformRequest,
   transformResponse,
   processHeaders,
-  flattenHeaders
+  flattenHeaders,
+  isAbsoulteURL,
+  combineURL
 } from '../utils'
 
 export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
+  throwIfCancellationRequested(config)
   processConfig(config)
   console.log('config', config)
   return xhr(config).then(res => {
@@ -34,8 +37,11 @@ function processConfig(config: AxiosRequestConfig): void {
  * @param config 需要处理的url请求参数：url, params
  */
 function transfromURL(config: AxiosRequestConfig): string {
-  const { url, params } = config
-  return buildURL(url!, params)
+  let { url, params, paramsSerializer, baseURL } = config
+  if (baseURL && !isAbsoulteURL(url!)) {
+    url = combineURL(baseURL, url)
+  }
+  return buildURL(url!, params, paramsSerializer)
 }
 /**
  * 处理post请求的data数据
@@ -62,4 +68,10 @@ function transformResponseData(res: AxiosResponse): AxiosResponse {
   // res.data = transformResponse(res.data)
   res.data = transform(res.data, res.headers, transformResponse)
   return res
+}
+
+function throwIfCancellationRequested(config: AxiosRequestConfig): void {
+  if (config.cancelToken) {
+    config.cancelToken.throwIfRequested()
+  }
 }
