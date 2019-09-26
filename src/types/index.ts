@@ -3,7 +3,7 @@
  */
 
 /**
- * 用Method去约束method的参数，避免什么值都可以传入
+ * 用Method去约束method的参数
  */
 export type Method =
   | 'get'
