@@ -9,7 +9,7 @@ export function encode(str: string): string {
     .replace(/%3A/gi, ':')
     .replace(/%24/g, '$')
     .replace(/%2c/gi, ',')
-    .replace(/%20/g, '+')
+    .replace(/%2B/g, '+')
     .replace(/%5B/gi, '[')
     .replace(/%5D/g, ']')
 }
@@ -55,11 +55,11 @@ export function buildURL(
       } else {
         arrTemp = [val]
       }
-      arrTemp.forEach(item => {
-        if (isDate(item)) {
-          val = item.toISOString()
-        } else if (isPlainObject(item)) {
-          val = JSON.stringify(item)
+      arrTemp.forEach(val => {
+        if (isDate(val)) {
+          val = val.toISOString()
+        } else if (isPlainObject(val)) {
+          val = JSON.stringify(val)
         }
         parts.push(`${encode(key)}=${encode(val)}`)
       })
@@ -109,7 +109,7 @@ function resolveURL(url: string): URLOrigin {
 /**
  * 判断绝对路径
  */
-export function isAbsoulteURL(url: string): boolean {
+export function isAbsoluteURL(url: string): boolean {
   return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url)
 }
 

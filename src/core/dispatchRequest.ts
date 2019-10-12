@@ -7,7 +7,7 @@ import {
   transformResponse,
   processHeaders,
   flattenHeaders,
-  isAbsoulteURL,
+  isAbsoluteURL,
   combineURL
 } from '../utils'
 
@@ -38,7 +38,7 @@ function processConfig(config: AxiosRequestConfig): void {
  */
 function transfromURL(config: AxiosRequestConfig): string {
   let { url, params, paramsSerializer, baseURL } = config
-  if (baseURL && !isAbsoulteURL(url!)) {
+  if (baseURL && !isAbsoluteURL(url!)) {
     url = combineURL(baseURL, url)
   }
   return buildURL(url!, params, paramsSerializer)
